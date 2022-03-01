@@ -1,0 +1,4 @@
+name = "Materialis"
+uuid = "18c0a5a4-be71-4087-bec4-e2e96c920d86"
+authors = ["jorgepz <jorgepz@fing.edu.uy>"]
+version = "0.1.0"
