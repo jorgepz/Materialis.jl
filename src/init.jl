@@ -1,4 +1,5 @@
 
 using MshReader,
-      WriteVTK
+      WriteVTK,
+      SparseArrays
 

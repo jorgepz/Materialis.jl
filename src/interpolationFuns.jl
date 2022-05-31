@@ -13,16 +13,16 @@
 %
 =#
 
-#function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
-
-function computeFEM2GridInterpMatrix( intGrid )
+function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
          
-  print(intGrid.voxelNums)
+  numVoxels = prod( intGrid.voxelNums )
 
-#  numVoxels = prod( intGrid.voxelNums )
+  numNodes  = size( Nodes, 1)
+  numElems  = length( Conec )
 
-  # numNodes  = size(Nodes, 1) ;
-  # numElems  = size(Conec, 1) ;
+  @assert typeof(Conec) == Vector{Vector{Int64}}
+
+  print("typof Conec", typeof(Conec) )
 
   # if order == 0
   #   interpMatrix = sparse( numCompon * numVoxels, numCompon * numElems ) ;
@@ -34,17 +34,20 @@ function computeFEM2GridInterpMatrix( intGrid )
 
   # mySpEye = speye( numCompon, numCompon ) ;
 
-#  % loop in elements for see which grid nodes are in an element.
-#  for i = 1 : numElems
+  # loop in elements for see which grid nodes are in an element.
+  for i in (1:numElems)
 
-
-    # coordesElem = Nodes( Conec( i,1:4) , :) ;
+    nodesElem = Conec[i]
+    coordesElem = Nodes[ nodesElem , :]
+    print("nodes eleem", nodesElem)
+    print("typof nodes eleem", typeof(nodesElem) )
+    print("nodes", Nodes)
     
-    # % coordenadas de boundix box de elemento
+    print("coords eleme", coordesElem)
+    print("size coords eleme", size(coordesElem) )
+    # coordenadas de boundix box de elemento
     # mins = min( coordesElem )' ;
     # maxs = max( coordesElem )' ;
-
-
 
     # [indsIni, indsEnd ] = ranges( mins, maxs, intGrid ) ;
     
@@ -91,8 +94,9 @@ function computeFEM2GridInterpMatrix( intGrid )
     #   end % loop z index
     # end % if length inds > 0
 
-#  end # loop elements
+  end # loop elements
 
-    return 1
+  interpMatrix = sparse( [], [], [] )
 
+  return interpMatrix
 end
