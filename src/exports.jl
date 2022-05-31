@@ -1,3 +1,5 @@
 export gridData,
        ROIData,
-       generateInputData
+       generateInputData,
+       intGrid,
+       computeFEM2GridInterpMatrix

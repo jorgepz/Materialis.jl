@@ -15,6 +15,13 @@ module Materialis
     gridMaxZ::Float64
   end
 
+
+  mutable struct intGrid
+    voxelNums::Vector{Int}
+    startVox::Vector{Float64}
+    voxelWidths::Vector{Float64}
+  end
+
   struct ROIData
     MinX::Float64
     MaxX::Float64
@@ -23,6 +30,8 @@ module Materialis
     MinZ::Float64
     MaxZ::Float64
   end
+
+  include("interpolationFuns.jl")
 
   # exports
   include("exports.jl")
