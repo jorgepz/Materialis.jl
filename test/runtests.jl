@@ -1,5 +1,4 @@
-using Materialis
-using WriteVTK
+using Materialis, WriteVTK
 using Test
 
 @testset "Test: FEM2Grid interpolation matrix" begin
@@ -10,7 +9,7 @@ using Test
     testNodes = [ auxMin auxMin auxMin ; auxMax auxMin auxMin ; auxMin auxMax auxMin ; auxMin auxMin auxMax ]
     testConec = [ [ 1, 2, 3, 4] ]
 
-    testGrid = intGrid( [2,2,2], [0., 0., 0.], [1., 1., 1.] )
+    testGrid = intGrid( [3,3,3], [0., 0., 0.], 0.3*ones(3) )
 
     computeFEM2GridInterpMatrix( testNodes, testConec, testGrid, 3, 0 )
 
