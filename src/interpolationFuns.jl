@@ -45,12 +45,13 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
     
     print("coords eleme", coordesElem)
     print("size coords eleme", size(coordesElem) )
-    # coordenadas de boundix box de elemento
-    # mins = min( coordesElem )' ;
-    # maxs = max( coordesElem )' ;
 
-    # [indsIni, indsEnd ] = ranges( mins, maxs, intGrid ) ;
-    
+    # coordenadas de boundix box de elemento
+    mins = vec( minimum( coordesElem, dims=1 ) )
+    maxs = vec( maximum( coordesElem, dims=1 ) )
+
+    indsIni, indsEnd = ranges( mins, maxs, intGrid )
+
     # if length( indsIni ) > 0
     #   for kg=indsIni(3):indsEnd(3)
     #     for jg=indsIni(2):indsEnd(2)
@@ -99,4 +100,33 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
   interpMatrix = sparse( [], [], [] )
 
   return interpMatrix
+end
+
+
+#= ==============================================================================
+%
+% funcion para calculo rangos de indices xyz de grid que efecitivamente caen dentro del box del elemento
+% 
+% ==============================================================================
+=#
+
+function ranges( mins, maxs, intGrid )
+
+  # indsIni = []
+  # indsEnd = []
+  
+  endVox = intGrid.startVox + intGrid.voxelNums .* intGrid.voxelWidths
+
+  print("end vox", endVox)
+  
+  # if the maximums of the box are higher than all components of the startVoxel
+  # then there could be an intersection
+  if ( sum( maxs .>= intGrid.startVox ) == 3 ) && ( sum( mins .<= endVox ) == 3 )
+    # there is intersection
+    print("there is intersection")
+    #indsEnd = min( ceil(  ( maxs - intGrid.startVox ) ./ intGrid.voxelWidths + 1 ) , intGrid.voxelNums ) ;
+  #   indsIni = max( floor( ( mins - intGrid.startVox ) ./ intGrid.voxelWidths + 1 ) , ones(3,1)         ) ;
+  end
+
+  return 1,2#indsIni, indsEnd
 end
