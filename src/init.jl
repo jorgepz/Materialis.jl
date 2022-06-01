@@ -1,6 +1,5 @@
 
 using MshReader,
       WriteVTK,
-      SparseArrays,
-      FEMAssembler
+      SparseArrays
 
