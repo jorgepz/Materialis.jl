@@ -172,3 +172,11 @@ function checkInTetra( nodesTetra, pointCand )
 
   return boolInTetra, shapeFuncs
 end
+
+
+
+
+function vecGridConvert(ind)
+
+  return 1
+end
