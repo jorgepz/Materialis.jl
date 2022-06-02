@@ -26,11 +26,11 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
 
   print("typof Conec", typeof(Conec) )
 
-  # if order == 0
-  #   interpMatrix = sparse( numCompon * numVoxels, numCompon * numElems ) ;
+  if order == 0
+    interpMatrix = spzeros( numCompon * numVoxels, numCompon * numElems )
   # elseif order == 1
   #   interpMatrix = sparse( numCompon * numVoxels, numCompon * numNodes ) ;
-  # end
+  end
 
   booleanInterFound = zeros( Bool, numVoxels )
 
@@ -82,11 +82,11 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
                 # then we found 
                 booleanInterFound[ind] = true
 
-    #             dofsGrid = nodes2dofs( ind, numCompon ) ;
+                # dofsGrid = nodes2dofs( ind, numCompon )
 
-    #             if order == 0
-    #               % assign interpolation of grid node ind to element i
-    #               interpMatrix( ind, i) = 1 ;
+                if order == 0
+                   # assign interpolation of grid node ind to element i
+                   interpMatrix[ind, i] = 1
                 
     #             elseif order == 1
     #               % assign interpolation of grid node ind to nodes of element i
@@ -96,7 +96,7 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
     #                                                         mySpEye*shapeFuncs(2) ...
     #                                                         mySpEye*shapeFuncs(3) ...
     #                                                         mySpEye*shapeFuncs(4) ] ;
-    #             end % if order 
+                end # if order 
 
               end # if it is in tetra
             end # if node already analyzed
@@ -106,8 +106,6 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
     end # if length inds > 0
 
   end # loop elements
-
-  interpMatrix = sparse( [], [], [] )
 
   return interpMatrix
 end
@@ -173,4 +171,12 @@ function checkInTetra( nodesTetra, pointCand )
   end
 
   return boolInTetra, shapeFuncs
+end
+
+
+
+
+function vecGridConvert(ind)
+
+  return 1
 end
