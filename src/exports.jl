@@ -3,4 +3,5 @@ export gridData,
        generateInputData,
        intGrid,
        vtkUnsGridPlot,
+       vtkStrGridPlot,
        computeFEM2GridInterpMatrix

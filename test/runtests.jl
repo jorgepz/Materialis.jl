@@ -11,18 +11,23 @@ using Test
 
     iniG = 0.
     voxelWidth = .3
-    numVox = 4*ones(Int, 3)
+    numVoxPerDim = 4
+    numVox = numVoxPerDim * ones(Int, 3)
 
     testGrid = intGrid( numVox , iniG*ones(3), voxelWidth*ones(3) )
 
     interpMatrix = computeFEM2GridInterpMatrix( testNodes, testConec, testGrid, 3, 0 )
 
-    print("AHHHHH:", Matrix(interpMatrix) )
+    #print("AHHHHH:", Matrix(interpMatrix) )
 
     magnitude = rand( size(testNodes,1), 3 )
 
     # paraview output
-    vtkUnsGridPlot( testConec, testNodes, magnitude )
+    vtkUnsGridPlot( testConec, testNodes, magnitude, "unstrgrid" )
+
+    magnitudes = [ rand( numVoxPerDim, numVoxPerDim, numVoxPerDim ), rand(3, numVoxPerDim, numVoxPerDim, numVoxPerDim )]
+
+    vtkStrGridPlot( testGrid, magnitudes, "strgrid" )
 
     @test 0 < 1
 end
