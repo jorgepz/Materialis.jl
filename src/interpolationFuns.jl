@@ -1,17 +1,14 @@
-#= ==============================================================================
-%
-% function for computation of interpolation matrix from FEM mesh to regular grid
-%    from displacements in tetraedra fem grid to a regular grid mesh
-%
-%  Inputs:
-%    - Nodes
-%    - Conec
-%    - numComponentes: number of components of the magnitude to be interpolated
-%    - order: 0 interpolates from elements centroids
-%            1 interpolates from nodes
-%
-%
-=#
+"""
+ function for computation of interpolation matrix from FEM mesh to regular grid
+    from displacements in tetraedra fem grid to a regular grid mesh
+
+  Inputs:
+    - Nodes: matrix with coordinates of nodes of the FEMmesh
+    - Conec: vector of vectors. at i-th entry has the vector with the connectivity indexes
+    - numComponentes: number of components of the magnitude to be interpolated
+    - order: 0 interpolates from elements centroids
+            1 interpolates from nodes
+"""
 
 function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
          
@@ -24,39 +21,29 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
 
   @assert typeof(Conec) == Vector{ Vector{Int64} }
 
-  print("typof Conec", typeof(Conec) )
-
-  if order == 0
-    interpMatrix = spzeros( numCompon * numVoxels, numCompon * numElems )
-  # elseif order == 1
-  #   interpMatrix = sparse( numCompon * numVoxels, numCompon * numNodes ) ;
-  end
-
   booleanInterFound = zeros( Bool, numVoxels )
 
-  print("boolean", booleanInterFound )
-  # mySpEye = speye( numCompon, numCompon ) ;
+  rowIndexes = Vector{Int}()
+  colIndexes = Vector{Int}()
+  nonZerVals = Vector{Float64}()
+
+  if order == 1
+    totalRows = numCompon * numVoxels
+    totalCols = numCompon * numNodes
+  end
 
   # loop in elements for see which grid nodes are in an element.
   for i in (1:numElems)
 
-    nodesElem = Conec[i]
+    nodesElem   = Conec[i]
     coordesElem = Nodes[ nodesElem , :]
-    print("nodes eleem", nodesElem)
-    print("typof nodes eleem", typeof(nodesElem) )
-    print("nodes", Nodes)
     
-    print("coords eleme", coordesElem)
-    print("size coords eleme", size(coordesElem) )
-
     # coordenadas de bounding box de elemento
     mins = vec( minimum( coordesElem, dims=1 ) )
     maxs = vec( maximum( coordesElem, dims=1 ) )
     
     # indexes of grid within bounding box
     indsIni, indsEnd = ranges( mins, maxs, intGrid )
-
-    print("indsss ini end", indsIni, indsEnd )
 
     if length( indsIni ) > 0
 
@@ -67,6 +54,8 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
             # number of voxel
             ind = (kg-1) * numVoxelsXY + (jg-1)*numVoxelsX + ig ;
             
+            print("ind grid", ind,"\n")
+
             # if an interpolation of the node was not already obtained
             if !(booleanInterFound[ind])
 
@@ -75,27 +64,29 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
               # verify if it belongs to the current element
               itIsInTetra, shapeFuncs = checkInTetra( coordesElem, pointCand )
 
-              print("it is in tetra: ", itIsInTetra, "\n" )
-              
               # if it is in the tetrahedron
               if itIsInTetra
-                # then we found 
+                # then we found it
                 booleanInterFound[ind] = true
 
-                # dofsGrid = nodes2dofs( ind, numCompon )
+                dofsGridInd = nodes2dofs( ind, numCompon )
 
-                if order == 0
-                   # assign interpolation of grid node ind to element i
-                   interpMatrix[ind, i] = 1
+                # if order == 0
+                #    # assign interpolation of grid node ind to element i
+                #    interpMatrix[ind, i] = 1
                 
-    #             elseif order == 1
-    #               % assign interpolation of grid node ind to nodes of element i
-    #               dofsNodesTet = nodes2dofs( Conec(i,1:4) , numCompon ) ;
-    #               %
-    #               interpMatrix( dofsGrid, dofsNodesTet ) = [ mySpEye*shapeFuncs(1) ...
-    #                                                         mySpEye*shapeFuncs(2) ...
-    #                                                         mySpEye*shapeFuncs(3) ...
-    #                                                         mySpEye*shapeFuncs(4) ] ;
+                if order == 1
+  
+                  for indShapeFunc in (1:length(shapeFuncs))
+
+                    dofsNode = nodes2dofs( nodesElem[indShapeFunc], numCompon )
+  
+                    append!( rowIndexes, dofsGridInd )
+                    append!( colIndexes, dofsNode    )
+                    append!( nonZerVals, shapeFuncs[ indShapeFunc ]*ones(numCompon) )
+
+                  end
+
                 end # if order 
 
               end # if it is in tetra
@@ -107,27 +98,20 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
 
   end # loop elements
 
-  return interpMatrix
+  return sparse( rowIndexes, colIndexes, nonZerVals, totalRows, totalCols )
 end
 
 
-#= ==============================================================================
-%
-% funcion para calculo rangos de indices xyz de grid que efecitivamente caen dentro del box del elemento
-% 
-% ==============================================================================
-=#
+"""
+ funcion para calculo rangos de indices xyz de grid que efecitivamente caen dentro del box del elemento
+"""
 
 function ranges( mins, maxs, intGrid )
   
-  endVox = intGrid.startVox + intGrid.voxelNums .* intGrid.voxelWidths
-  print("end vox", endVox)
-  
   # if the maximums of the box are higher than all components of the startVoxel
   # then there could be an intersection
-  if ( sum( maxs .>= intGrid.startVox ) == 3 ) && ( sum( mins .<= endVox ) == 3 )
+  if ( sum( maxs .>= intGrid.startVox ) == 3 ) && ( sum( mins .<= intGrid.endVox ) == 3 )
     # there is intersection
-    print("there is intersection")
     indsEnd = Int.( min.( ceil.(  ( maxs - intGrid.startVox ) ./ intGrid.voxelWidths .+ 1 ), intGrid.voxelNums ) )
     indsIni = Int.( max.( floor.( ( mins - intGrid.startVox ) ./ intGrid.voxelWidths .+ 1 ), ones(3)           ) )
   else
@@ -139,9 +123,9 @@ function ranges( mins, maxs, intGrid )
 end
 
 
-# ===========================================================================
-# ===========================================================================
-# ===========================================================================
+"""
+TO DO
+"""
 
 function checkInTetra( nodesTetra, pointCand )
  
@@ -174,9 +158,28 @@ function checkInTetra( nodesTetra, pointCand )
 end
 
 
-
+"""
+TO DO
+"""
 
 function vecGridConvert(ind)
 
   return 1
+end
+
+
+
+"""
+
+copied from
+https://github.com/jorgepz/FEMAssembler.jl/blob/main/src/mesh/dofsComputations.jl
+
+"""
+function nodes2dofs( nodes , degreespernode )
+    n    = length(nodes);
+    dofs = zeros( Int, n*degreespernode ) ;
+    for i in (1:n);
+        dofs[ (i-1)*degreespernode .+ Vector(1:degreespernode) ] = (degreespernode*(nodes[i]-1)).+Vector(1:degreespernode)  ;
+    end
+    return dofs;
 end

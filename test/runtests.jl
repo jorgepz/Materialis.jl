@@ -9,23 +9,22 @@ using Test
     testNodes = [ auxMin auxMin auxMin ; auxMax auxMin auxMin ; auxMin auxMax auxMin ; auxMin auxMin auxMax ]
     testConec = [ [ 1, 2, 3, 4] ]
 
-    iniG = 0.
-    voxelWidth = .3
-    numVoxPerDim = 4
-    numVox = numVoxPerDim * ones(Int, 3)
+    iniG = 0.0
+    endG = 1.0
+    numVoxPerDim = 20
 
-    testGrid = intGrid( numVox , iniG*ones(3), voxelWidth*ones(3) )
+    testGrid = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
 
-    interpMatrix = computeFEM2GridInterpMatrix( testNodes, testConec, testGrid, 3, 0 )
+    interpMatrix = computeFEM2GridInterpMatrix( testNodes, testConec, testGrid, 1, 1 )
 
-    #print("AHHHHH:", Matrix(interpMatrix) )
+    magnitudeFEM = [ 1, 2, 3, 4 ]
 
-    magnitude = rand( size(testNodes,1), 3 )
+    magnitudeGrid = interpMatrix * magnitudeFEM 
 
     # paraview output
-    vtkUnsGridPlot( testConec, testNodes, magnitude, "unstrgrid" )
+    vtkUnsGridPlot( testConec, testNodes, magnitudeFEM, "unstrgrid" )
 
-    magnitudes = [ rand( numVoxPerDim, numVoxPerDim, numVoxPerDim ), rand(3, numVoxPerDim, numVoxPerDim, numVoxPerDim )]
+    magnitudes = [ reshape( magnitudeGrid, ( numVoxPerDim, numVoxPerDim, numVoxPerDim ) ) ]
 
     vtkStrGridPlot( testGrid, magnitudes, "strgrid" )
 
