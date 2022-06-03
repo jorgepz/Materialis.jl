@@ -1,7 +1,8 @@
 export gridData,
        ROIData,
        generateInputData,
-       intGrid,
+       GridData,
+       createGrid,
        vtkUnsGridPlot,
        vtkStrGridPlot,
        computeFEM2GridInterpMatrix
