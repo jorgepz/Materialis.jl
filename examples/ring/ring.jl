@@ -1,4 +1,7 @@
 
+
+using Materialis
+
 # Ring example
 
 generateBoolean   = true
@@ -16,11 +19,30 @@ lz = 0.001
 mmHg2Pa = 133 
 deltap  = 25  # mmHg
 
-iniG = 0.0
-endG = 1.0
-numVoxPerDim = 20
+iniG = -0.003
+endG = 0.003
+numVoxPerDim = 50
+
+include("ringInterpolFun.jl")
 
 testGrid = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
+
+gridNodes = computeGridNodes( testGrid )
+
+print(gridNodes)
+gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
+
+print("\n\n", gridIntVals)
+
+auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) ]
+
+vtkStrGridPlot( testGrid, auxgridint, "ring_00" )
+
+gridIntVals = ringInterpolFunc( gridNodes, r1*1.1, r2*1.2 )
+
+auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) ]
+
+vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
 
 # external box grid
 # boxGrid = [   -3e-3    3e-3   ; ...

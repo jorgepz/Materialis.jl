@@ -52,7 +52,7 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
           for ig in (indsIni[1]:indsEnd[1])
 
             # number of voxel
-            ind = (kg-1) * numVoxelsXY + (jg-1)*numVoxelsX + ig ;
+            ind = (kg-1) * numVoxelsXY + (jg-1)*numVoxelsX + ig
             
             # if an interpolation of the node was not already obtained
             if !(booleanInterFound[ind])
