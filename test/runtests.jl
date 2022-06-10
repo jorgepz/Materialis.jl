@@ -4,9 +4,7 @@ using Test
 @testset "Test: FEM2Grid interpolation matrix" begin
 
     # generate the FEM mesh
-    Lx = 0.5
-    Ly = 1.0
-    Lz = 1.2
+    Lx = 0.5;  Ly = 1.0;  Lz = 1.2
 
     testNodes = [ 0    0    0 ;
                   0    0   Lz ;

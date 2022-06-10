@@ -103,7 +103,6 @@ end
 """
  funcion para calculo rangos de indices xyz de grid que efecitivamente caen dentro del box del elemento
 """
-
 function ranges( mins, maxs, intGrid )
   
   # if the maximums of the box are higher than all components of the startVoxel

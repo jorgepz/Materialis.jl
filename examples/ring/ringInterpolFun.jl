@@ -4,14 +4,13 @@ function ringInterpolFunc( nodes, rint, rext )
 
   vals = zeros( Float64, nnodes ) 
 
-  for i in (1:nnodes)
-    rval = sum( nodes[i,:].^2 )
-    print("hola", rval,"\n")
-    if (rval < rext^2) && (rval > rint^2)
-        vals[i] = rval
+  rval = sqrt.( sum( nodes[:,1:2].^2, dims=2 ) )
+
+  for i in (1:nnodes)    
+    if (rval[i] < rext) && (rval[i] > rint)
+        vals[i] = rval[i]
     end
   end
 
   return vals
-
 end

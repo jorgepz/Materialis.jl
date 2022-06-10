@@ -1,5 +1,4 @@
 
-
 using Materialis
 
 # Ring example
@@ -14,14 +13,12 @@ r1 = 0.0020 ;
 lz = 0.001 
 
 # generate fem mesh
-
-
 mmHg2Pa = 133 
 deltap  = 25  # mmHg
 
 iniG = -0.003
 endG = 0.003
-numVoxPerDim = 50
+numVoxPerDim = 200
 
 include("ringInterpolFun.jl")
 
@@ -29,10 +26,10 @@ testGrid = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
 
 gridNodes = computeGridNodes( testGrid )
 
-print(gridNodes)
+#print(gridNodes)
 gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
 
-print("\n\n", gridIntVals)
+#print("\n\n", gridIntVals)
 
 auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) ]
 
