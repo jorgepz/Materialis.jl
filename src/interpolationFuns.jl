@@ -52,7 +52,7 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
           for ig in (indsIni[1]:indsEnd[1])
 
             # number of voxel
-            ind = (kg-1) * numVoxelsXY + (jg-1)*numVoxelsX + ig ;
+            ind = (kg-1) * numVoxelsXY + (jg-1)*numVoxelsX + ig
             
             # if an interpolation of the node was not already obtained
             if !(booleanInterFound[ind])
@@ -103,7 +103,6 @@ end
 """
  funcion para calculo rangos de indices xyz de grid que efecitivamente caen dentro del box del elemento
 """
-
 function ranges( mins, maxs, intGrid )
   
   # if the maximums of the box are higher than all components of the startVoxel

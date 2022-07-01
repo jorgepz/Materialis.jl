@@ -5,4 +5,5 @@ export gridData,
        createGrid,
        vtkUnsGridPlot,
        vtkStrGridPlot,
-       computeFEM2GridInterpMatrix
+       computeFEM2GridInterpMatrix,
+       computeGridNodes
