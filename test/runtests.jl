@@ -41,7 +41,7 @@ using Test
 
     # paraview output of structured grid data
     magnitudes = reshape( magnitudeGrid, ( numVox[1], numVox[2], numVox[3] ) )
-    vtkStrGridPlot( testGrid, [magnitudes], "teststrgrid" )
+    vtkStrGridPlot( testGrid, magnitudes, "teststrgrid" )
 
     numericalInte = magnitudes[3,2,2]
     analyticaInte = sum( ( testGrid.voxelWidths .* [2,1,1] .+ testGrid.startVox ) .* [Ix,Iy,Iz] )
