@@ -31,15 +31,19 @@ gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
 
 #print("\n\n", gridIntVals)
 
-auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) ]
+auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
 
 vtkStrGridPlot( testGrid, auxgridint, "ring_00" )
 
 gridIntVals = ringInterpolFunc( gridNodes, r1*1.1, r2*1.2 )
 
-auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) ]
+auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
 
 vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
+
+
+image_based_identification( ["ring_00.vti", "ring_01.vti"], [1,2],0,0 )
+
 
 # external box grid
 # boxGrid = [   -3e-3    3e-3   ; ...

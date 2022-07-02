@@ -19,15 +19,16 @@ end
 vtkStrGridPlot: function for writing vtk structured grid files and magnitudes
  - nodalMagnitudes: vector of Any with [ magnitudes1, magnitudes2, ...]
 """
-function vtkStrGridPlot( grid, nodalMagnitudes, filename )
+function vtkStrGridPlot( grid, nodalMagnitude, filename )
 
   x, y, z = LinRange.( grid.startVox, grid.endVox, grid.voxelNums )
 
   # vtk_grid( filename, x, y, z,  append = false, ascii=true ) do vtk
   vtk_grid( filename, x, y, z ) do vtk
-    for i in (1:length(nodalMagnitudes))
-      vtk[ string("magnitude_",i), VTKPointData() ] = nodalMagnitudes[i]
-    end
+    #for i in (1:length(nodalMagnitudes))
+    #  vtk[ string("intensity",i), VTKPointData() ] = nodalMagnitudes[i]
+    #end
+    vtk[ "intensity", VTKPointData() ] = nodalMagnitude
   end
 
 end
