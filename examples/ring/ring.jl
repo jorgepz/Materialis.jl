@@ -12,6 +12,10 @@ r2 = 0.0024 ;
 r1 = 0.0020 ;
 lz = 0.001 
 
+include("analytic_disps.jl")
+
+u1 = analytic_disps( [1,0],1 )
+
 # generate fem mesh
 mmHg2Pa = 133 
 deltap  = 25  # mmHg
@@ -41,8 +45,7 @@ auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
 
 vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
 
-
-image_based_identification( ["ring_00.vti", "ring_01.vti"], [1,2],0,0 )
+image_based_identification( ["ring_00.vti", "ring_01.vti"], [1,2],0,0, "analytic_disps", 1 )
 
 
 # external box grid
