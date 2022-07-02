@@ -41,6 +41,12 @@ auxgridint = [ reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) ) 
 
 vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
 
+
+
+
+image_based_identification( ["ring_00.vti"] )
+
+
 # external box grid
 # boxGrid = [   -3e-3    3e-3   ; ...
 #               -3e-3     3e-3  ; ...

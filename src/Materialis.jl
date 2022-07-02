@@ -7,6 +7,7 @@ module Materialis
 
   include("gridOperations.jl")
   include("interpolationFuns.jl")
+  include("identification.jl")
   include("IO/vtkOutput.jl")
 
   # exports
