@@ -7,4 +7,5 @@ export gridData,
        vtkStrGridPlot,
        computeFEM2GridInterpMatrix,
        computeGridNodes,
-       image_based_identification
+       image_based_identification,
+       read_vtk_grid_data

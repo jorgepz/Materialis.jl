@@ -9,6 +9,7 @@ module Materialis
   include("interpolationFuns.jl")
   include("identification.jl")
   include("IO/vtkOutput.jl")
+  include("IO/vtkInput.jl")
 
   # exports
   include("exports.jl")

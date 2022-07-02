@@ -10,8 +10,7 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
     strCase, flagsPyOct )
 =#
 
-    [grid, intensities ] = read_vtk_grid_data( imageFilenames )
-
+    grid, intensities = read_vtk_grid_data( imageFilenames )
 
     #--------------
     #gradientes int
