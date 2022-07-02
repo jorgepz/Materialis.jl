@@ -1,7 +1,7 @@
 """
  - matParams: vector with material parameters
 """
-function image_based_identification( imageFilenames, matParams, tolDeltaP, methodNumber )
+function image_based_identification( imageFilenames, matParams, tolDeltaP, methodNumber, dispFuncName, tension )
     
     #=( tolDeltaP, pIni, nu, 
     imageFilenames, minsROI, maxsROI,
@@ -14,7 +14,7 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
 
     #--------------
     #gradientes int
-
+    # not by the moment
     #--------------
 
 
@@ -25,6 +25,8 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
 
         for indMP in (1:length(matParams))
             print("\n", indMP,"\n", matParams[indMP] )
+
+            u = compute_disps( dispFuncName, [matParams[indMP],0], tension )
         end
     end
 
@@ -32,9 +34,8 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
 end
 
 
-function compute_disps( dispFuncName, tension, matParam )
-    
-    u, dudp = eval( Symbol( dispFuncName ))(tension, matParam)
-    return u, dudp
+function compute_disps( dispFuncName, matParam, tension )
 
+    u = eval( Symbol( dispFuncName ))( matParam, tension )
+    return u
 end
