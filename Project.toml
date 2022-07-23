@@ -4,7 +4,6 @@ authors = [""]
 version = "0.1.0"
 
 [deps]
-FEMAssembler = "e7bcd777-3339-4a95-8b9e-a3acefc5ad76"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 MshReader = "64cd2da2-d71d-431a-81e3-4cf84ef169dd"
 ReadVTK = "dc215faf-f008-4882-a9f7-a79a826fadc3"

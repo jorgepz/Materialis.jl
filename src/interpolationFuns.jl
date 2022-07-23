@@ -19,7 +19,7 @@ function computeFEM2GridInterpMatrix( Nodes, Conec, intGrid, numCompon, order )
   numNodes  = size( Nodes, 1)
   numElems  = length( Conec )
 
-  @assert typeof(Conec) == Vector{ Vector{Int64} }
+  typeof(Conec) != Vector{Vector{Int}} && error("type of Conec: ", typeof(Conec) )
 
   booleanInterFound = zeros( Bool, numVoxels )
 
