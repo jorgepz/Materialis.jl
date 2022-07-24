@@ -1,8 +1,9 @@
 # example uniaxial extension
 using Materialis
 
-problem_name = "uniaxial_extension"
+problem_name = "extension"
 
+# -----------------------------
 # reference material parameters
 E_ref  = 2 
 nu     = 0.4 
@@ -11,21 +12,25 @@ largo = 1
 ladoSecc = .2
 tension = 2.0
 
-solver_params = SolidSolverParams("analytic", [ "ring_disps_fun", nu, tension ] )
+solver_params = SolidSolverParams("analytic", [ "extension_disps_fun", nu, tension ] )
 # -----------------------------
+
 
 # -----------------------------
 # grid parameters
-grid_start = [.25,.25]
-grid_end   = grid_start .+ .5
-num_voxels = [ 256, 256]  # roi 181
+image_width = 0.5
+grid_start  = [.25,.25,.0]
+num_voxels  = [ 256, 256,1]  # roi 181
 
-myGrid = create_grid( grid_start, grid_end, num_voxels )
+grid_end   = grid_start .+ image_width
 
-# myROI  = ROIData( .4, .6, ladoSecc*0.25, ladoSecc*0.35, ladoSecc*0.25, ladoSecc*0.35    )
+my_grid = create_grid( grid_start, grid_end, num_voxels )
+my_ROI  = ROIData( [ .325, .325, .0 ], [ .675, .675, .0 ]    )
+
+grid_nodes = compute_grid_nodes( my_grid );
+# -----------------------------
 
 
-# plotParamsVector = [ 3 ]
-# tolDeltaP        = 1e-4 # convergence criterion
-# tolDeltaP = 1e-5 
+# generate data
+#measured_data = generate_data( problem_name )
 

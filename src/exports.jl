@@ -1,8 +1,8 @@
-# grid management
-export gridData,
-       ROIData,
+
+# grid structs and functions
+export ROIData,
        GridData,
-       computeGridNodes,
+       compute_grid_nodes,
        create_grid
 
 # vtk
