@@ -36,11 +36,13 @@ Function that computes the displacement using external user-provided tools at th
 function compute_disps( mat_param, solver_params, grid )
 
     if cmp( solver_params.solver_type, "analytic")==0
+
         disp_func_name = solver_params.params[1]
 
-#        include(disp_func_name * ".jl")
+        u = eval( Symbol( disp_func_name ) )( nodes_matrix, mat_param, solver_params.params )
 
-        u = eval( Symbol( disp_func_name ) )( mat_param, solver_params.params )
+
+
     end
 
     return u

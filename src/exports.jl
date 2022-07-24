@@ -3,7 +3,7 @@ export gridData,
        ROIData,
        GridData,
        computeGridNodes,
-       createGrid
+       create_grid
 
 # vtk
 export vtkUnsGridPlot,
