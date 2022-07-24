@@ -48,7 +48,11 @@ using Test
 
     @test abs( numericalInte - analyticaInte ) < ( 1.0e-8*abs(analyticaInte) )
 
-    
-    include("../examples/extension/extension.jl")
+    BASE_FOLDER = dirname(dirname(pathof(Materialis) ) )
+
+    # include( joinpath(BASE_FOLDER,"examples","extension","extension_disps_fun.jl") )
+    # include( joinpath(BASE_FOLDER,"examples","extension","extension_inten_fun.jl") )
+
+    include( joinpath( BASE_FOLDER, "examples", "extension", "extension.jl") )
 
 end
