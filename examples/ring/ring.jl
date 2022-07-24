@@ -4,26 +4,27 @@
 
 using Materialis
 
-include("ring_disps.jl")
-
+name = "ring"
 generate_boolean   = true
 
-# outDir = '../../../...' ;
+include("ring_disps_fun.jl")
+include("ring_inten_fun.jl")
 
 # -----------------------------
 # solver params 
 
 # geometry
-r2 = 0.0024
-r1 = 0.0020 
+Re = 0.0024
+Ri = 0.0020 
 lz = 0.001
 
+# Poisson ratio
 nu = 0.45   
 
 # generate fem mesh
 tension  = 25  # mmHg
 
-solver_params = SolidSolverParams("analytic", [ "ring_disps", r1, r2, lz, nu, tension ] )
+solver_params = SolidSolverParams("analytic", [ "ring_disps", Ri, Re, lz, nu, tension ] )
 # -----------------------------
 
 
@@ -31,26 +32,20 @@ solver_params = SolidSolverParams("analytic", [ "ring_disps", r1, r2, lz, nu, te
 # grid parameters
 iniG = -0.003
 endG = 0.003
-numVoxPerDim = 200
+numVoxPerDim = 10
 
-testGrid = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
-gridNodes = computeGridNodes( testGrid )
+my_grid    = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
+grid_nodes = computeGridNodes( my_grid )
 # -----------------------------
 
+print(" grid nodes", grid_nodes)
 
 # -----------------------------
 # interpolate and construct images
 if generate_boolean
-    gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
-    auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
-    vtkStrGridPlot( testGrid, auxgridint, "ring_00" )
-
-    gridIntVals = ringInterpolFunc( gridNodes, r1*1.1, r2*1.2 )
-    auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
-    vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
+    measured_data = generate_data( "ring" )
 end
 
-measured_data = [ "ring_00.vti","ring_01.vti" ]
 
 # -----------------------------
 
@@ -58,7 +53,7 @@ measured_data = [ "ring_00.vti","ring_01.vti" ]
 
 
 # -----------------------------
-image_based_identification( measured_data, [1,2], 0, 0, solver_params )
+# image_based_identification( measured_data, [1,2], 0, 0, solver_params )
 
 
 # external box grid

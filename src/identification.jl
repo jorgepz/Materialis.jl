@@ -19,7 +19,9 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
         for indMP in (1:length(matParams))
             print("\n", indMP, "\n", matParams[indMP] )
 
-            u = compute_disps( matParams[indMP], solver_params )
+            u_grid = compute_disps( matParams[indMP], solver_params, grid )
+
+            
         end
 
 
@@ -29,9 +31,9 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
 end
 
 """
-Function that computes the displacement using external user-provided tools.
+Function that computes the displacement using external user-provided tools at the points of the image grid.
 """
-function compute_disps( mat_param, solver_params )
+function compute_disps( mat_param, solver_params, grid )
 
     if cmp( solver_params.solver_type, "analytic")==0
         disp_func_name = solver_params.params[1]
