@@ -43,5 +43,6 @@ end
 
 mutable struct SolidSolverParams
     solver_type::String
+    disps_fun::Function
     params::Vector
 end

@@ -3,19 +3,6 @@ using Materialis
 
 problem_name = "extension"
 
-function extension_disps_fun( nodes_matrix, material, params )
-    E = material
-    nu, tension = params[2:end]
-    C = tension * ( 1-nu-2*nu^2) / ( 1-nu )
-
-    num_nodes = size( nodes_matrix, 1)
-
-    disps = hcat(   C / E       * nodes_matrix[:,1], zeros( num_nodes ) )
-    dudE  = hcat( - C / (E^2.0) * nodes_matrix[:,1], zeros( num_nodes ) )
-
-    return disps, dudE
-end
-
 # -----------------------------
 # reference material parameters
 E_ref  = 2.0
@@ -25,7 +12,21 @@ largo = 1
 ladoSecc = .2
 tension = .2
 
-solver_params = SolidSolverParams("analytic", [ "extension_disps_fun", nu, tension ] )
+function extension_disps_fun( nodes_matrix, material, params )
+    E = material
+    nu, tension = params[2:end]
+    C = tension * ( 1-nu-2*nu^2) / ( 1-nu )
+
+    num_nodes = size( nodes_matrix, 1)
+
+    disps = [ hcat(   C / E       * nodes_matrix[:,1], zeros( num_nodes ) ) ]
+    dudE  = [ hcat( - C / (E^2.0) * nodes_matrix[:,1], zeros( num_nodes ) ) ]
+
+    return disps, dudE
+end
+
+
+solver_params = SolidSolverParams("analytic", extension_disps_fun, [ "extension_disps_fun", nu, tension ] )
 # -----------------------------
 
 
