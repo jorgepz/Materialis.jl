@@ -1,7 +1,7 @@
 using Materialis
 using Test
 
-@testset "Test: FEM2Grid interpolation matrix" begin
+@testset "Materialis" begin
 
     # generate the FEM mesh
     Lx = 0.5;  Ly = 1.0;  Lz = 1.2
@@ -26,7 +26,7 @@ using Test
     iniG = -0.2
     endG = 1.0
     numVox = [ 10, 5, 8]
-    testGrid = createGrid( iniG*ones(3), endG*ones(3), numVox )
+    testGrid = create_grid( iniG*ones(3), endG*ones(3), numVox )
 
     # generate synthetic intensity in FEM mesh
     Ix, Iy, Iz = [.2, .3, -.4]
@@ -47,4 +47,8 @@ using Test
     analyticaInte = sum( ( testGrid.voxelWidths .* [2,1,1] .+ testGrid.startVox ) .* [Ix,Iy,Iz] )
 
     @test abs( numericalInte - analyticaInte ) < ( 1.0e-8*abs(analyticaInte) )
+
+    
+    include("../examples/extension/extension.jl")
+
 end

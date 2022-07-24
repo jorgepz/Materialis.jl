@@ -1,11 +1,17 @@
+# grid management
 export gridData,
        ROIData,
-       generateInputData,
        GridData,
-       createGrid,
-       vtkUnsGridPlot,
-       vtkStrGridPlot,
-       computeFEM2GridInterpMatrix,
        computeGridNodes,
-       image_based_identification,
+       create_grid
+
+# vtk
+export vtkUnsGridPlot,
+       vtkStrGridPlot,
        read_vtk_grid_data
+
+# core
+export computeFEM2GridInterpMatrix,
+       image_based_identification,
+       generate_data,
+       SolidSolverParams
