@@ -1,7 +1,7 @@
 """
  - matParams: vector with material parameters
 """
-function image_based_identification( imageFilenames, matParams, tolDeltaP, methodNumber, dispFuncName, tension )
+function image_based_identification( imageFilenames, matParams, tolDeltaP, methodNumber, solver_params )
     
     #=( tolDeltaP, pIni, nu, 
     imageFilenames, minsROI, maxsROI,
@@ -13,29 +13,33 @@ function image_based_identification( imageFilenames, matParams, tolDeltaP, metho
     grid, intensities = read_vtk_grid_data( imageFilenames )
 
     #--------------
-    #gradientes int
-    # not by the moment
-    #--------------
-
-
-    #--------------
-
     if methodNumber == 0
-        # brute force method
 
+        # brute-force search
         for indMP in (1:length(matParams))
-            print("\n", indMP,"\n", matParams[indMP] )
+            print("\n", indMP, "\n", matParams[indMP] )
 
-            u = compute_disps( dispFuncName, [matParams[indMP],0], tension )
+            u = compute_disps( matParams[indMP], solver_params )
         end
+
+
     end
 
     return 1
 end
 
+"""
+Function that computes the displacement using external user-provided tools.
+"""
+function compute_disps( mat_param, solver_params )
 
-function compute_disps( dispFuncName, matParam, tension )
+    if cmp( solver_params.solver_type, "analytic")==0
+        disp_func_name = solver_params.params[1]
 
-    u = eval( Symbol( dispFuncName ))( matParam, tension )
+#        include(disp_func_name * ".jl")
+
+        u = eval( Symbol( disp_func_name ) )( mat_param, solver_params.params )
+    end
+
     return u
 end

@@ -1,4 +1,4 @@
-function ringInterpolFunc( nodes, rint, rext )
+function ring_intens_fun( nodes, rint, rext )
 
   nnodes = size(nodes,1)
 

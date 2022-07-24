@@ -1,3 +1,9 @@
+"""
+    AbstractMeasuredData
+Abstract supertype that holds the measured data information.
+"""
+abstract type AbstractMeasuredData end
+
 
 struct GridData
     voxelNums::Vector{Int}
@@ -26,4 +32,10 @@ function createGrid( minPoint, maxPoint, voxelNums )
     endVox        =   maxPoint - voxelWidths * 0.5           
 
     return GridData( voxelNums, startVox, voxelWidths, endVox )
+end
+
+
+mutable struct SolidSolverParams
+    solver_type::String
+    params::Vector
 end

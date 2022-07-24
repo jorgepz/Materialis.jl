@@ -1,51 +1,64 @@
+# ----------------------
+# Ring example
+# ----------------------
 
 using Materialis
 
-# Ring example
+include("ring_disps.jl")
 
-generateBoolean   = true
+generate_boolean   = true
 
 # outDir = '../../../...' ;
 
+# -----------------------------
+# solver params 
+
 # geometry
-r2 = 0.0024 ;
-r1 = 0.0020 ;
-lz = 0.001 
+r2 = 0.0024
+r1 = 0.0020 
+lz = 0.001
 
-include("analytic_disps.jl")
-
-u1 = analytic_disps( [1,0],1 )
+nu = 0.45   
 
 # generate fem mesh
-mmHg2Pa = 133 
-deltap  = 25  # mmHg
+tension  = 25  # mmHg
 
+solver_params = SolidSolverParams("analytic", [ "ring_disps", r1, r2, lz, nu, tension ] )
+# -----------------------------
+
+
+# -----------------------------
+# grid parameters
 iniG = -0.003
 endG = 0.003
 numVoxPerDim = 200
 
-include("ringInterpolFun.jl")
-
 testGrid = createGrid( iniG*ones(3), endG*ones(3), numVoxPerDim )
-
 gridNodes = computeGridNodes( testGrid )
+# -----------------------------
 
-#print(gridNodes)
-gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
 
-#print("\n\n", gridIntVals)
+# -----------------------------
+# interpolate and construct images
+if generate_boolean
+    gridIntVals = ringInterpolFunc( gridNodes, r1, r2 )
+    auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
+    vtkStrGridPlot( testGrid, auxgridint, "ring_00" )
 
-auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
+    gridIntVals = ringInterpolFunc( gridNodes, r1*1.1, r2*1.2 )
+    auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
+    vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
+end
 
-vtkStrGridPlot( testGrid, auxgridint, "ring_00" )
+measured_data = [ "ring_00.vti","ring_01.vti" ]
 
-gridIntVals = ringInterpolFunc( gridNodes, r1*1.1, r2*1.2 )
+# -----------------------------
 
-auxgridint = reshape( gridIntVals, (numVoxPerDim,numVoxPerDim,numVoxPerDim) )
 
-vtkStrGridPlot( testGrid, auxgridint, "ring_01" )
 
-image_based_identification( ["ring_00.vti", "ring_01.vti"], [1,2],0,0, "analytic_disps", 1 )
+
+# -----------------------------
+image_based_identification( measured_data, [1,2], 0, 0, solver_params )
 
 
 # external box grid
