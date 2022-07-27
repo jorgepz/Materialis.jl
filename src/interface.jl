@@ -4,6 +4,11 @@ Abstract supertype that holds the measured data information.
 """
 abstract type AbstractMeasuredData end
 
+mutable struct ImageParams
+    image_gener_params
+    inten_fun::Function
+end
+
 
 struct GridData
     voxelNums::Vector{Int}
@@ -36,8 +41,8 @@ function create_grid( minPoint, maxPoint, voxelNums )
     return GridData( voxelNums, startVox, voxelWidths, endVox )
 end
 
-
 mutable struct SolidSolverParams
     solver_type::String
+    disps_fun::Function
     params::Vector
 end

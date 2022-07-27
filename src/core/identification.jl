@@ -39,8 +39,7 @@ function compute_disps( mat_param, solver_params, grid )
 
         disp_func_name = solver_params.params[1]
 
-        u = eval( Symbol( disp_func_name ) )( nodes_matrix, mat_param, solver_params.params )
-
+        u, dudp = eval( Symbol( disp_func_name ) )( nodes_matrix, mat_param, solver_params.params )
 
 
     end
